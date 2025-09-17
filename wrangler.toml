@@ -4,8 +4,8 @@ compatibility_date = "2024-09-25"
 
 [[kv_namespaces]]
 binding = "PIXIE_STORE"
-id = "REPLACE_WITH_PRODUCTION_NAMESPACE_ID"
-preview_id = "REPLACE_WITH_PREVIEW_NAMESPACE_ID"
+id = "71fb6467abb7431ba85a31e110a86672"
+preview_id = "8fd62987b4ea485e830de99e54f901f4"
 
 [vars]
 # Secrets are managed through `wrangler secret` and will override these defaults.
