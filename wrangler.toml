@@ -1,0 +1,11 @@
+name = "pixie"
+main = "src/index.ts"
+compatibility_date = "2024-09-25"
+
+[[kv_namespaces]]
+binding = "PIXIE_STORE"
+id = "REPLACE_WITH_PRODUCTION_NAMESPACE_ID"
+preview_id = "REPLACE_WITH_PREVIEW_NAMESPACE_ID"
+
+[vars]
+# Secrets are managed through `wrangler secret` and will override these defaults.
