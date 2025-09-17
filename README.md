@@ -85,6 +85,18 @@ Sample response:
 
 Use `pixelUrl` inside any HTML email. Keep the `accessToken` private; it acts as a bearer token for retrieving event logs.
 
+## Minting Pixels from the CLI
+
+The repo includes a helper script that wraps the API call:
+
+```bash
+export PIXIE_ENDPOINT="https://pixie.example.workers.dev"
+export PIXIE_API_KEY="<your secret>"
+npm run create:pixel -- --label "Quarterly update" --metadata campaign=q4 --metadata segment=vip
+```
+
+Flags override environment variables when provided (`--endpoint`, `--api-key`). Add `--json` to print the full JSON response or `--help` for usage details.
+
 ## Embedding in Gmail or Spark
 
 1. Compose your email (Gmail web UI or Spark).
@@ -100,10 +112,20 @@ To review opens, visit the `eventsUrl` from the creation response. Append `&form
 
 ## Privacy & Compliance Notes
 
-- The Worker stores a truncated IP address, user agent, requested language, and country/region/city when Cloudflare provides it. Adjust `src/index.ts` if you need to drop or further anonymize any fields.
-- Update your workspace privacy policy and notify recipients where required. Remote images can be blocked by some clients; false negatives are expected.
+- The Worker persists truncated IP addresses, user agents, accept-language headers, and Cloudflare-provided geo (country/region/city). Adjust `src/index.ts` if your data policy requires further minimisation or different retention windows.
+- Document the tracking behaviour in your internal handbook (e.g. Workspace acceptable-use policy) and, when contacting external recipients, ensure your privacy notice or footer discloses remote-image tracking where required by law.
+- Cloudflare Workers runs in multiple geographies; verify the chosen KV region satisfies your data residency requirements.
+- Remote images can be disabled by recipients or filtered by security gateways. Expect false negatives and use the data as directional rather than definitive proof of receipt.
 
-## Next Steps
+## Testing
 
-- Automate pixel creation via a small CLI or Apps Script that calls the Worker before sending an email.
-- Use Durable Objects or a database if you expect a high volume of opens (KV's eventual consistency and 1 MB per value limit may become restrictive).
+Automated tests exercise the Worker directly with an in-memory KV stub and cover the create → open → report flow:
+
+```bash
+npm test
+```
+
+## Roadmap Ideas
+
+- Use Durable Objects or R2 if you need stronger consistency or want to retain raw event logs beyond KV limits.
+- Add a Google Apps Script that mints pixels on the fly from Gmail drafts, or build a Spark plugin that calls the Worker before send.
